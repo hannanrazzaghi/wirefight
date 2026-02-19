@@ -16,13 +16,14 @@ pip install -r requirements.txt
 2. Analyze results:
 
 ```bash
-python analyze.py ../results
+python analyze.py
 ```
 
 This will:
 - Parse all JSON files in the results directory
 - Generate comparative charts in `results/charts/`
 - Create `results/BENCHMARK_SUMMARY.md` with tabulated results
+- Create `results/BENCHMARK_REPORT.md` from `report_template.md`
 
 ## Output
 
