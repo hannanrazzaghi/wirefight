@@ -14,12 +14,12 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/hannan/wirefight/api/proto"
-	"github.com/hannan/wirefight/go-service/internal/config"
-	grpcHandler "github.com/hannan/wirefight/go-service/internal/grpc"
-	"github.com/hannan/wirefight/go-service/internal/jsonrpc"
-	"github.com/hannan/wirefight/go-service/internal/metrics"
-	"github.com/hannan/wirefight/go-service/internal/rest"
+	"github.com/hannanrazzaghi/wirefight/api/proto"
+	"github.com/hannanrazzaghi/wirefight/go-service/internal/config"
+	grpcHandler "github.com/hannanrazzaghi/wirefight/go-service/internal/grpc"
+	"github.com/hannanrazzaghi/wirefight/go-service/internal/jsonrpc"
+	"github.com/hannanrazzaghi/wirefight/go-service/internal/metrics"
+	"github.com/hannanrazzaghi/wirefight/go-service/internal/rest"
 	"google.golang.org/grpc"
 )
 

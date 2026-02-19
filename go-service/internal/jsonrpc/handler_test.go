@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/hannan/wirefight/go-service/internal/metrics"
+	"github.com/hannanrazzaghi/wirefight/go-service/internal/metrics"
 )
 
 func TestHandleRPC_Success(t *testing.T) {

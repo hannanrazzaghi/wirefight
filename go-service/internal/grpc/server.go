@@ -4,9 +4,9 @@ import (
 	"context"
 	"log"
 
-	"github.com/hannan/wirefight/api/proto"
-	"github.com/hannan/wirefight/go-service/internal/logic"
-	"github.com/hannan/wirefight/go-service/internal/metrics"
+	"github.com/hannanrazzaghi/wirefight/api/proto"
+	"github.com/hannanrazzaghi/wirefight/go-service/internal/logic"
+	"github.com/hannanrazzaghi/wirefight/go-service/internal/metrics"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

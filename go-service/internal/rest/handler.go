@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/hannan/wirefight/go-service/internal/logic"
-	"github.com/hannan/wirefight/go-service/internal/metrics"
+	"github.com/hannanrazzaghi/wirefight/go-service/internal/logic"
+	"github.com/hannanrazzaghi/wirefight/go-service/internal/metrics"
 )
 
 // Handler handles REST API requests
