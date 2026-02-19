@@ -1,68 +1,147 @@
-# Wirefight
+# wirefight
 
-Controlled localhost benchmarking lab comparing protocol overhead and behavior under load.
+Localhost-only benchmarking lab to compare protocol overhead across:
 
-## Protocols Compared
+- REST (JSON over HTTP)
+- JSON-RPC 2.0 (over HTTP)
+- gRPC (protobuf)
 
-1. **REST** - JSON over HTTP using chi router
-2. **JSON-RPC 2.0** - Minimal implementation over HTTP
-3. **gRPC** - Protocol buffers
+All three call the same internal business logic so the comparison isolates protocol behavior.
 
-All three execute **identical business logic** to measure pure protocol overhead.
+## Assumptions
 
-## Architecture
+- Benchmarks run on a single machine (localhost only).
+- Server and load generator use the same Go toolchain/build.
+- Debug logs are disabled during benchmark runs.
+- HTTP keep-alive and gRPC connection reuse stay enabled.
+- Warmup traffic is excluded from measured metrics.
 
-- **Go Service**: Single binary exposing all three protocol endpoints
-- **Go Load Generator**: Stress testing tool with configurable concurrency
-- **Python Analytics**: Result parsing, statistical analysis, and visualization
+## Repository Layout
 
-## Project Structure
-
-```
+```text
 wirefight/
-├── go-service/          # Service implementation
-│   ├── cmd/server/      # Main entry point
-│   └── internal/        # Protocol handlers + shared logic
-├── loadgen/             # Load generator
-│   ├── cmd/loadgen/     # CLI entry point
-│   └── internal/        # Worker pool + result aggregation
-├── api/proto/           # Protobuf definitions
-├── benchmark/           # Python analytics
-├── results/             # Benchmark output
-└── Makefile             # Build and run automation
+├── go-service/
+│   ├── cmd/server/main.go
+│   └── internal/
+│       ├── config/
+│       ├── grpc/
+│       ├── jsonrpc/
+│       ├── logic/
+│       ├── metrics/
+│       └── rest/
+├── loadgen/
+│   ├── cmd/loadgen/main.go
+│   └── internal/
+│       ├── results/
+│       ├── runner/
+│       └── scenarios/
+├── api/proto/compute.proto
+├── benchmark/
+│   ├── analyze.py
+│   ├── charts.py
+│   └── report_template.md
+├── results/
+├── scripts/generate-proto.sh
+└── Makefile
 ```
+
+## Service Endpoints
+
+- REST: `POST /v1/compute`
+- JSON-RPC: `POST /rpc` (`method = "compute"`)
+- gRPC: `ComputeService.Compute`
+- Health: `GET /health`
+- Metrics: `GET /metrics`
+- pprof (separate port): `GET /debug/pprof/`
+
+## Request/Response Semantics
+
+Request fields:
+
+- `request_id`
+- `mode` (`cpu` | `io`)
+- `work_factor`
+- `payload_size_bytes`
+
+Response fields:
+
+- `request_id`
+- `mode`
+- `work_factor`
+- `payload_size_bytes`
+- `result`
+- `server_processing_ms`
+- `protocol`
+- `timestamp`
+
+## Workload Modes
+
+- `cpu`: deterministic SHA-256 loop (`iterations = work_factor`)
+- `io`: simulated I/O via sleep (`sleep_ms = work_factor`)
+
+## Benchmark Matrix
+
+Supported matrix sweep target (`make benchmark-matrix`):
+
+- Protocols: `rest`, `jsonrpc`, `grpc`
+- Modes: `cpu`, `io`
+- Concurrency: `1, 10, 50, 100, 250`
+- Payload sizes: `256, 4096, 65536` bytes
+- Work factors:
+  - CPU: `100, 1000`
+  - IO: `5, 20`
+
+## Prerequisites
+
+- Go 1.21+
+- Python 3.9+
+- `protoc`
+- `protoc-gen-go` and `protoc-gen-go-grpc`
 
 ## Quick Start
 
 ```bash
-# Build everything
+make install-tools
+make proto
 make build
+make test
+```
 
-# Run service
+Start service:
+
+```bash
 make run-service
+```
 
-# Run benchmarks (in another terminal)
-make benchmark
+In a second terminal run benchmarks:
 
-# Generate report
+```bash
+make benchmark-quick
+# or
+make benchmark-matrix
+```
+
+Generate analysis and report:
+
+```bash
 make analyze
 ```
 
-## Workload Modes
+Outputs:
 
-- **cpu**: Deterministic SHA-256 hashing (work_factor = iterations)
-- **io**: Simulated I/O via sleep (work_factor = sleep_ms)
+- Raw results: `results/*.json`
+- Charts: `results/charts/*.png`
+- Summary: `results/BENCHMARK_SUMMARY.md`
+- Report: `results/BENCHMARK_REPORT.md`
 
-## Requirements
+## Commit Discipline
 
-- Go 1.21+
-- Python 3.9+ with matplotlib
-- protoc compiler
+Recommended conventional commit prefixes:
 
-## Fairness Principles
-
-- Same machine, same Go build
-- Connection reuse (keep-alive, gRPC pooling)
-- Warmup phase before measurement
-- Debug logging disabled during load
-- All assumptions documented
+- `feat:` new functionality
+- `fix:` bug fix
+- `refactor:` code restructuring
+- `test:` test changes
+- `docs:` documentation
+- `perf:` performance-focused changes
+- `chore:` maintenance and tooling
