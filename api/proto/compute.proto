@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package compute;
+
+option go_package = "github.com/hannan/wirefight/api/proto;proto";
+
+// ComputeService provides the compute endpoint for benchmarking
+service ComputeService {
+  rpc Compute(ComputeRequest) returns (ComputeResponse);
+}
+
+// ComputeRequest represents the request for compute operation
+message ComputeRequest {
+  string request_id = 1;
+  string mode = 2;
+  int32 work_factor = 3;
+  int32 payload_size_bytes = 4;
+}
+
+// ComputeResponse represents the response from compute operation
+message ComputeResponse {
+  string request_id = 1;
+  string mode = 2;
+  int32 work_factor = 3;
+  int32 payload_size_bytes = 4;
+  string result = 5;
+  double server_processing_ms = 6;
+  string protocol = 7;
+  string timestamp = 8;
+}
