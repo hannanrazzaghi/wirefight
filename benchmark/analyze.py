@@ -7,7 +7,7 @@ import platform
 import socket
 import subprocess
 from collections import defaultdict
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 from charts import render_mode_charts
@@ -126,7 +126,7 @@ def write_report(rows, output_file: Path):
     io_work_factors = sorted({row["work_factor"] for row in rows if row["mode"] == "io"})
 
     report = template.format(
-        date=datetime.utcnow().strftime("%Y-%m-%d"),
+        date=datetime.now(UTC).strftime("%Y-%m-%d"),
         host=socket.gethostname(),
         go_version=read_go_version(),
         python_version=platform.python_version(),
