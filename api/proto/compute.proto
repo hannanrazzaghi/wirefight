@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package compute;
 
-option go_package = "github.com/hannan/wirefight/api/proto;proto";
+option go_package = "github.com/hannanrazzaghi/wirefight/api/proto;proto";
 
 // ComputeService provides the compute endpoint for benchmarking
 service ComputeService {

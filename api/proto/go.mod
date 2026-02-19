@@ -1,4 +1,4 @@
-module github.com/hannan/wirefight/api/proto
+module github.com/hannanrazzaghi/wirefight/api/proto
 
 go 1.25.0
 
