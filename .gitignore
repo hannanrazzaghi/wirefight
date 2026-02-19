@@ -1,0 +1,48 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+go-service/server
+loadgen/loadgen
+
+# Go
+*.test
+*.out
+/vendor/
+go.work
+
+# Results and benchmark data
+results/*.json
+results/charts/*.png
+results/charts/*.pdf
+results/*.md
+!results/.gitkeep
+!results/charts/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Generated
+api/proto/*.pb.go
+
+# Temporary
+*.tmp
+*.log
